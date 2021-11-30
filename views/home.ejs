@@ -1,0 +1,154 @@
+<html>
+    <head>
+    <!-- title -->
+    <title>
+        <%= title %>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- icon -->
+	<link rel ="icon" href="/images/clear.png" type = "image/x-icon" sizes="32x32" >
+	<!-- animate.css -->
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+	<!-- fontawesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<!-- home style css -->
+	<link rel="stylesheet" type="text/css" href="/css/home.css">
+    </head>
+    <body class=" animate__animated animate__fadeIn">
+        <!-- navigation -->
+        <nav>
+            <!-- logo -->
+            <div id="LOGO">
+                <a href="#"><i class="fas fa-check-double animate__animated animate__flip"></i></a>
+            </div>
+            <!-- name of the app -->
+            <div id="name">
+                <span class="TextinNav">TODO</span><br><span class="TextinNav" style="font-weight:700; color:#ee1c24">List</span>
+            </div>
+            </div>
+        </nav>
+        <!-- body -->
+        <div id="body">
+            <!-- Left content with form to collect info -->
+            <div id="content">
+                <form action="/create-task" method="POST">
+                    <!-- for the task tile -->
+                    <div class="boxes">
+                        <div id="tasktitle">
+                            <div class="headstyle">
+                                <label for="titles">
+                                    Task Todo
+                                </label>
+                            </div>
+                            <div class="Block">
+                                <input type="text" required="true" placeholder="What's your next task ?" id="titles" name="title">
+                            </div>  
+                        </div>
+                        <!-- for the task description -->
+                        <div id="taskdescription">
+                            <div class="headstyle">
+                                <label for="Describe">
+                                    Task Description
+                                </label>
+                            </div>
+                            <div class="Block">
+                                <textarea id="Describe" name="taskdescription" rows="5" cols="100%" placeholder="Tell something about your upcoming task..." required="true"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="boxes">
+                        <!-- for the category -->
+                        <div id="categories">
+                            <div class="headstyle">
+                                <label for="Category">
+                                    Category
+                                </label>
+                            </div>
+                            <div class="Block">
+                                <!-- select menu -->
+                                <select name="category" id="Category" required="true">
+                                    <optgroup label="Choose Category">
+                                    <option value="none" selected disabled hidden>
+                                        Choose Category
+                                    </option>
+                                        <option value="Personal">Personal</option>
+                                        <option value="Work">Work</option>
+                                        <option value="School">School</option>
+                                        <option value="Cleaning">Cleaning</option>
+                                        <option value="Others">Others</option>
+                                    </optgroup>    
+                                </select>
+                            </div>
+                        </div>
+                        <!-- to get the date from the form -->
+                        <div id="dates">
+                            <div class="headstyle">
+                                <label for="Dat">
+                                    Due Date
+                                </label>
+                            </div>
+                            <div class="Block">
+                                <input type="date" required="true" id="Dat" name="date">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- add task and delete task button  -->
+                    <div class="boxes" style="justify-content:center;">
+                        <button type="submit"><i class="fas fa-calendar-plus"> </i>&nbsp; Add Task</button>
+                        <!-- delete button to delete the selected task....coonected to the form which has all the task in list shown on the page -->
+                        <button type="submit" id="deletebtn" form="Queue"><i class="fas fa-trash-alt"> </i>&nbsp; Delete Tasks</button>
+                    </div>
+                    
+                </form>  
+           </div>
+            <!-- Right Aside List -->
+            <form id="Queue" action="/delete-selected" method="POST">
+                <!-- Header of List(heading) -->
+                    <div class="header">	
+                    <div class="headstyle">
+                        <i class="fas fa-clipboard-list"></i> Upcoming Tasks...
+                    </div>
+                    <!-- select all and deselect all button -->
+                    <div style="text-align:right">
+                        <a href="#" class="TextinBlock catstyle" id="selectallbtn" style="font-size:0.9rem; font-weight:500;color:aliceblue;padding:7px 8px ;background-image:linear-gradient(45deg,rgba(238,28,36,0.6),rgba(33,38,44,1));border:1px white solid;margin-right:0.5rem ;">Select All</a>
+                        <a href="#" class="TextinBlock catstyle" id="Deselectallbtn" style="font-size:0.9rem; font-weight:500;color:aliceblue;padding:7px 8px ;background-image:linear-gradient(45deg,rgba(238,28,36,0.6),rgba(33,38,44,1));border:1px white solid;margin-right:0.5rem ;">Deselect All</a>		
+                    </div>
+                    </div>
+                    
+                    <!-- Each Task Box Repeated Below  using for loop gets data from  the db-->
+                    <% for(let i of todo_list) { %>
+                        <div class="taskbox">
+             
+                            <div id="taskName">
+                                <!-- checkbox to select -->
+                                <input type="checkbox" style="width:10%" value="<%= i._id %>" name="task">
+                                <!-- task title and the date -->
+                                <div>
+                                    <span class="TextinBlock name " style="line-height:2rem;text-decoration:#ee1c24 underline;text-underline-offset:3px ;"><%= i.title %></span><br><span class="TextinBlock" style="font-size:0.8rem; font-weight:400 "><i class="far fa-calendar-alt" style="color:#ee1c24 ;"></i> <%= new Date(i.date).toDateString(); %></span>
+                                </div> 
+                            </div> 
+                            <div id="aboutcat">
+                                <!-- task category and the delete btn to delete directly -->
+                                <p class="catstyle"><%= i.category %></p>
+                                <a id="dele" type="radio" class="mybutton" href="/delete-single-task/?Id=<%= i._id %>"><span class="TextinBlock" style="font-size:0.8rem; font-weight:400; margin:1rem; "><i class="fas fa-trash-alt"></i></span></a>
+                            </div>
+                            <div id="abouttask">
+                                <!-- task description with 'description as heading' -->
+                                <div class="desc">
+                                    Description:
+                                </div>
+                                <span class="TextinBlock" style="font-size:0.9rem; font-weight:400;"><%= i.taskdescription %></p></span>
+                            </div>       
+                        </div>
+                    <% } %>
+                </form>
+        </div>
+        <!-- including the jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <!-- including the js file -->
+    <script src="/js/home.js"></script>
+    </body>
+</html>
