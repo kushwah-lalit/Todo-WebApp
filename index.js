@@ -12,7 +12,6 @@ const app = express();
 const bodyParser = require('body-parser');
 // setting the port
 const port = process.env.POST || 8000;
-const localaddress = process.env.LOCAL_ADDRESS;
 // adding middleware to convert the request data to json object
 app.use(express.urlencoded({extended: true})); 
 app.use(express.json()); 
@@ -35,7 +34,7 @@ app.set('view engine', 'ejs');
 // setting the path to access the views files
 app.set('views', './views');
 // running the express
-app.listen(port,localaddress,function(error){
+app.listen(port,function(error){
     if(error){
         console.log(`Error occured while running the server: ${port}`);
     }

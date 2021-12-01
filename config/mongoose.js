@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 // connect to mongodb
-mongoose.connect(process.env.MONGODB_URL,{
+mongoose.connect(process.env.MONGODB_URL||'mongodb://localhost/TODOWebApp_development',{
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
